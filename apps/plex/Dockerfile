@@ -1,6 +1,6 @@
 FROM docker.io/library/ubuntu:24.04
 
-ARG TARGETPLATFORM
+ARG TARGETARCH
 ARG VERSION
 ARG CHANNEL
 
@@ -38,17 +38,8 @@ RUN \
         uuid-runtime \
         xmlstarlet \
     && \
-    case "${TARGETPLATFORM}" in \
-        'linux/amd64') \
-            export ARCH='amd64'; \
-        ;; \
-        'linux/arm64') \
-            export ARCH='arm64'; \
-        ;; \
-    esac \
-    && \
     curl -fsSL -o /tmp/plex.deb \
-        "https://downloads.plex.tv/plex-media-server-new/${VERSION}/debian/plexmediaserver_${VERSION}_${ARCH}.deb" \
+        "https://downloads.plex.tv/plex-media-server-new/${VERSION}/debian/plexmediaserver_${VERSION}_${TARGETARCH}.deb" \
     && \
     dpkg -i --force-confold /tmp/plex.deb \
     && chmod -R 755 "${PLEX_MEDIA_SERVER_HOME}" \
