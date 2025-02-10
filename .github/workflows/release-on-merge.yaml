@@ -6,14 +6,14 @@ concurrency:
   group: container-release
   cancel-in-progress: false
 
-# on:
-#   push:
-#     branches: ["main"]
-#     paths:
-#       - "apps/**"
-#       - "scripts/templates/**"
-#       - "!apps/**/metadata.yaml"
-#       - "!apps/**/README.md"
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "apps/**"
+      - "scripts/templates/**"
+      - "!apps/**/metadata.yaml"
+      - "!apps/**/README.md"
 
 jobs:
   simple-checks:
