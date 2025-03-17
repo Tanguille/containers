@@ -8,52 +8,14 @@ on:
       - "!apps/actions-runner/metadata.yaml"
       - "!apps/actions-runner/README.md"
   workflow_dispatch:
-    inputs:
-      force:
-        description: Force rebuild
-        type: boolean
-        default: true
-        required: true
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/image-build-action.yaml
     permissions:
       contents: read
       packages: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Get latest runner version
-        id: version
-        run: |
-          VERSION=$(./apps/actions-runner/ci/latest.sh)
-          echo "Debug: VERSION=$VERSION"
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
-
-      - name: Sanitize repository name
-        id: sanitize
-        run: echo "repo=${{ github.repository }}" | tr '[:upper:]' '[:lower:]' >> $GITHUB_ENV
-
-      - name: Build and push
-        uses: docker/build-push-action@471d1dc4e07e5cdedd4c2171150001c434f0b7a4 # v6
-        with:
-          context: apps/actions-runner
-          push: true
-          build-args: |
-            VERSION=${{ steps.version.outputs.version }}
-          tags: |
-            ghcr.io/${{ env.repo }}/actions-runner:latest
-            ghcr.io/${{ env.repo }}/actions-runner:${{ steps.version.outputs.version }}
+    with:
+      app: actions-runner
+      version: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.event_name == 'push' }}
+      release: ${{ github.event_name == 'workflow_dispatch' && inputs.release || github.event_name == 'push' }}
