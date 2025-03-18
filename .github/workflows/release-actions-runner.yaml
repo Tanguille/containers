@@ -26,7 +26,11 @@ jobs:
       - name: Set version
         id: version
         run: |
-          version=$(echo '${{ steps.metadata.outputs.content }}' | yq .version)
+          version=$(echo '${{ steps.metadata.outputs.content }}' | yq -r '.version' | tr -d '[:space:]')
+          if [ -z "$version" ]; then
+            echo "Error: Empty version string"
+            exit 1
+          fi
           echo "version=${version}" >> $GITHUB_OUTPUT
 
   build:
