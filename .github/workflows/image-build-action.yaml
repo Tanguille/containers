@@ -51,18 +51,18 @@ jobs:
             VERSION=${{ inputs.version }}
             REVISION=${{ github.sha }}
           cache-from: |
-            ${{ format('type=registry,ref=ghcr.io/{0}/build_cache:{1}-{2},mode=max', github.repository_owner, inputs.app, matrix.platform) | lower }}
+            ${{ format('type=registry,ref=ghcr.io/{0}/build_cache:{1}-{2},mode=max', toLower(github.repository_owner), inputs.app, matrix.platform) }}
           cache-to: |
-            ${{ inputs.release && format('type=registry,ref=ghcr.io/{0}/build_cache:{1}-{2}', github.repository_owner, inputs.app, matrix.platform) | lower || '' }}
+            ${{ inputs.release && format('type=registry,ref=ghcr.io/{0}/build_cache:{1}-{2}', toLower(github.repository_owner), inputs.app, matrix.platform) || '' }}
           labels: |
             org.opencontainers.image.title=${{ inputs.app }}
-            org.opencontainers.image.url=https://ghcr.io/${{ github.repository_owner | lower }}/${{ inputs.app }}
+            org.opencontainers.image.url=https://ghcr.io/${{ toLower(github.repository_owner) }}/${{ inputs.app }}
             org.opencontainers.image.version=${{ inputs.version }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.vendor=${{ github.repository_owner }}
           outputs: |
             type=docker
-            ${{ inputs.release && format('type=image,name=ghcr.io/{0}/{1},push-by-digest=true,name-canonical=true,push=true', github.repository_owner | lower, inputs.app) || '' }}
+            ${{ inputs.release && format('type=image,name=ghcr.io/{0}/{1},push-by-digest=true,name-canonical=true,push=true', toLower(github.repository_owner), inputs.app) || '' }}
           context: ./apps/${{ inputs.app }}
           platforms: linux/${{ matrix.platform }}
           provenance: false
@@ -140,7 +140,7 @@ jobs:
         uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # v5.7.0
         with:
           flavor: latest=false
-          images: ghcr.io/${{ github.repository_owner | lower }}/${{ inputs.app }}
+          images: ghcr.io/${{ toLower(github.repository_owner) }}/${{ inputs.app }}
           tags: |
             type=match,pattern=^v?(\d+(\.\d+)?(\.\d+)?(\.\d+)?),value=${{ inputs.version }}
             type=match,pattern=^v?(\d+(\.\d+)),value=${{ inputs.version }},enable=${{ steps.semver.outputs.result }}
@@ -153,8 +153,8 @@ jobs:
         with:
           inputs: ${{ join(fromJSON(steps.meta.outputs.json).tags, ',') }}
           images: >-
-            ghcr.io/${{ github.repository_owner | lower }}/${{ inputs.app }}@${{ needs.build.outputs.amd64 }},
-            ghcr.io/${{ github.repository_owner | lower }}/${{ inputs.app }}@${{ needs.build.outputs.arm64 }}
+            ghcr.io/${{ toLower(github.repository_owner) }}/${{ inputs.app }}@${{ needs.build.outputs.amd64 }},
+            ghcr.io/${{ toLower(github.repository_owner) }}/${{ inputs.app }}@${{ needs.build.outputs.arm64 }}
           push: true
 
       - name: Export Digest
@@ -167,4 +167,4 @@ jobs:
         uses: sigstore/cosign-installer@d7d6bc7722e3daa8354c50bcb52f4837da5e9b6a # v3.8.1
 
       - name: Sign Image
-        run: cosign sign --yes ghcr.io/${{ github.repository_owner | lower }}/${{ inputs.app }}@${{ steps.digest.outputs.digest }}
+        run: cosign sign --yes ghcr.io/${{ toLower(github.repository_owner) }}/${{ inputs.app }}@${{ steps.digest.outputs.digest }}
