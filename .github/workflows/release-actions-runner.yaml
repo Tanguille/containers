@@ -10,11 +10,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  prepare:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
+    outputs:
+      version: ${{ steps.metadata.outputs.version }}
     steps:
       - uses: actions/checkout@v4
 
@@ -24,9 +23,19 @@ jobs:
         with:
           path: apps/actions-runner/metadata.yaml
 
-      - name: Build image
-        uses: ./.github/workflows/image-build-action.yaml
-        with:
-          app: actions-runner
-          version: ${{ github.event_name == 'workflow_dispatch' && inputs.version || fromJson(steps.metadata.outputs.content).version }}
-          release: ${{ github.event_name == 'workflow_dispatch' && inputs.release || github.event_name == 'push' }}
+      - name: Set version
+        id: version
+        run: |
+          version=$(echo '${{ steps.metadata.outputs.content }}' | yq .version)
+          echo "version=${version}" >> $GITHUB_OUTPUT
+
+  build:
+    needs: prepare
+    uses: ./.github/workflows/image-build-action.yaml
+    permissions:
+      contents: read
+      packages: write
+    with:
+      app: actions-runner
+      version: ${{ github.event_name == 'workflow_dispatch' && inputs.version || needs.prepare.outputs.version }}
+      release: ${{ github.event_name == 'workflow_dispatch' && inputs.release || github.event_name == 'push' }}
