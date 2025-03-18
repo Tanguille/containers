@@ -145,7 +145,7 @@ jobs:
         uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # v5.7.0
         with:
           flavor: latest=false
-          images: ghcr.io/${{ toLower(github.repository_owner) }}/${{ inputs.app }}
+          images: ghcr.io/${{ steps.repo.outputs.owner }}/${{ inputs.app }}
           tags: |
             type=match,pattern=^v?(\d+(\.\d+)?(\.\d+)?(\.\d+)?),value=${{ inputs.version }}
             type=match,pattern=^v?(\d+(\.\d+)),value=${{ inputs.version }},enable=${{ steps.semver.outputs.result }}
@@ -158,8 +158,8 @@ jobs:
         with:
           inputs: ${{ join(fromJSON(steps.meta.outputs.json).tags, ',') }}
           images: >-
-            ghcr.io/${{ toLower(github.repository_owner) }}/${{ inputs.app }}@${{ needs.build.outputs.amd64 }},
-            ghcr.io/${{ toLower(github.repository_owner) }}/${{ inputs.app }}@${{ needs.build.outputs.arm64 }}
+            ghcr.io/${{ steps.repo.outputs.owner }}/${{ inputs.app }}@${{ needs.build.outputs.amd64 }},
+            ghcr.io/${{ steps.repo.outputs.owner }}/${{ inputs.app }}@${{ needs.build.outputs.arm64 }}
           push: true
 
       - name: Export Digest
@@ -172,4 +172,4 @@ jobs:
         uses: sigstore/cosign-installer@d7d6bc7722e3daa8354c50bcb52f4837da5e9b6a # v3.8.1
 
       - name: Sign Image
-        run: cosign sign --yes ghcr.io/${{ toLower(github.repository_owner) }}/${{ inputs.app }}@${{ steps.digest.outputs.digest }}
+        run: cosign sign --yes ghcr.io/${{ steps.repo.outputs.owner }}/${{ inputs.app }}@${{ steps.digest.outputs.digest }}
