@@ -33,6 +33,10 @@ jobs:
           fi
           echo "version=${version}" >> $GITHUB_OUTPUT
 
+      - name: Debug version
+        run: |
+          echo "Version from metadata: ${{ needs.prepare.outputs.version }}"
+
   build:
     needs: prepare
     uses: ./.github/workflows/image-build-action.yaml
