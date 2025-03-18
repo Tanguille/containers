@@ -13,7 +13,7 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.metadata.outputs.version }}
+      version: ${{ steps.version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
 
@@ -26,16 +26,14 @@ jobs:
       - name: Set version
         id: version
         run: |
+          # Ensure we get a clean version string and validate it
           version=$(echo '${{ steps.metadata.outputs.content }}' | yq -r '.version' | tr -d '[:space:]')
           if [ -z "$version" ]; then
-            echo "Error: Empty version string"
+            echo "Error: Version cannot be empty"
             exit 1
           fi
+          echo "Version being set to: $version" # Debug output
           echo "version=${version}" >> $GITHUB_OUTPUT
-
-      - name: Debug version
-        run: |
-          echo "Version from metadata: ${{ needs.prepare.outputs.version }}"
 
   build:
     needs: prepare
@@ -45,5 +43,5 @@ jobs:
       packages: write
     with:
       app: actions-runner
-      version: ${{ github.event_name == 'workflow_dispatch' && inputs.version || needs.prepare.outputs.version }}
+      version: ${{ needs.prepare.outputs.version }}
       release: ${{ github.event_name == 'workflow_dispatch' && inputs.release || github.event_name == 'push' }}
