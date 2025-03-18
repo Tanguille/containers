@@ -11,11 +11,22 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/image-build-action.yaml
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-    with:
-      app: actions-runner
-      version: ${{ github.event_name == 'workflow_dispatch' && inputs.version || fromJson(steps.metadata.outputs.json).version }}
-      release: ${{ github.event_name == 'workflow_dispatch' && inputs.release || github.event_name == 'push' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read metadata.yaml
+        id: metadata
+        uses: jaywcjlove/github-action-read-file@main
+        with:
+          path: apps/actions-runner/metadata.yaml
+
+      - name: Build image
+        uses: ./.github/workflows/image-build-action.yaml
+        with:
+          app: actions-runner
+          version: ${{ github.event_name == 'workflow_dispatch' && inputs.version || fromJson(steps.metadata.outputs.content).version }}
+          release: ${{ github.event_name == 'workflow_dispatch' && inputs.release || github.event_name == 'push' }}
