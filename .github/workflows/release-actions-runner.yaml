@@ -44,4 +44,4 @@ jobs:
     with:
       app: actions-runner
       version: ${{ needs.prepare.outputs.version }}
-      release: ${{ github.event_name == 'workflow_dispatch' && inputs.release || github.event_name == 'push' }}
+      release: ${{ github.event_name == 'workflow_dispatch' && (inputs.release || true) || true }}
