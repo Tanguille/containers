@@ -172,9 +172,3 @@ jobs:
         run: |
           digest=$(echo "${{ steps.push.outputs.images }}" | grep -oP 'sha256:[^, ]+' | head -n1)
           echo "digest=${digest}" >> $GITHUB_OUTPUT
-
-      - name: Install Cosign
-        uses: sigstore/cosign-installer@d7d6bc7722e3daa8354c50bcb52f4837da5e9b6a # v3.8.1
-
-      - name: Sign Image
-        run: cosign sign --yes ghcr.io/${{ steps.repo.outputs.owner }}/${{ inputs.app }}@${{ steps.digest.outputs.digest }}
