@@ -51,8 +51,6 @@ RUN \
 COPY ./qBittorrent.conf /app/qBittorrent.conf
 COPY ./entrypoint.sh /entrypoint.sh
 
-COPY --from=ghcr.io/linuxserver/unrar:latest /usr/bin/unrar-alpine /usr/bin/unrar
-
 USER nobody:nogroup
 WORKDIR /config
 VOLUME ["/config"]

@@ -1,0 +1,4 @@
+---
+# renovate: datasource=github-releases depName=containernetworking/plugins
+version: v1.6.2
+name: cni-plugins

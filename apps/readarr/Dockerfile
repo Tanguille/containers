@@ -7,8 +7,8 @@ ARG VERSION
 ENV UMASK="0002" \
     TZ="Etc/UTC"
 
-ENV DOTNET_EnableDiagnostics=0 \
-    SONARR__UPDATE__BRANCH=develop
+ENV COMPlus_EnableDiagnostics=0 \
+    READARR__UPDATE__BRANCH=develop
 
 USER root
 WORKDIR /app
@@ -35,11 +35,11 @@ RUN \
         'linux/arm64') export ARCH='arm64' ;; \
     esac \
     && mkdir -p /app/bin \
-    && curl -fsSL "https://services.sonarr.tv/v1/update/${SONARR__UPDATE__BRANCH}/download?version=${VERSION}&os=linuxmusl&runtime=netcore&arch=${ARCH}" \
+    && curl -fsSL "https://readarr.servarr.com/v1/update/${READARR__UPDATE__BRANCH}/updatefile?version=${VERSION}&os=linuxmusl&runtime=netcore&arch=${ARCH}" \
         | tar xzf - -C /app/bin --strip-components=1 \
-    && printf "UpdateMethod=docker\nBranch=%s\nPackageVersion=%s\nPackageAuthor=[%s](https://github.com/%s)\n" "${SONARR__UPDATE__BRANCH}" "${VERSION}" "${VENDOR}" "${VENDOR}" > /app/package_info \
+    && printf "UpdateMethod=docker\nBranch=%s\nPackageVersion=%s\nPackageAuthor=[%s](https://github.com/%s)\n" "${READARR__UPDATE__BRANCH}" "${VERSION}" "${VENDOR}" "${VENDOR}" > /app/package_info \
     && chown -R root:root /app && chmod -R 755 /app \
-    && rm -rf /tmp/* /app/bin/Sonarr.Update
+    && rm -rf /tmp/* /app/bin/Readarr.Update
 
 COPY ./entrypoint.sh /entrypoint.sh
 
@@ -49,4 +49,4 @@ VOLUME ["/config"]
 
 ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
 
-LABEL org.opencontainers.image.source="https://github.com/Sonarr/Sonarr"
+LABEL org.opencontainers.image.source="https://github.com/Readarr/Readarr"

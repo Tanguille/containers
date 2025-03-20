@@ -1,4 +1,4 @@
-FROM docker.io/library/ubuntu:plucky-20241213
+FROM docker.io/library/ubuntu:25.04
 
 ARG TARGETARCH
 ARG VENDOR

@@ -1,6 +1,3 @@
-> [!WARNING]
-> This repository has moved [here](https://github.com/home-operations/containers) and will be deleted on or after March 17, 2026.
-
 <div align="center">
 
 ## Containers
@@ -11,13 +8,13 @@ _An opinionated collection of container images_
 
 <div align="center">
 
-![GitHub Repo stars](https://img.shields.io/github/stars/onedr0p/containers?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/onedr0p/containers?style=for-the-badge)
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/onedr0p/containers/release.yaml?style=for-the-badge&label=Release)
+![GitHub Repo stars](https://img.shields.io/github/stars/home-operations/containers?style=for-the-badge)
+![GitHub forks](https://img.shields.io/github/forks/home-operations/containers?style=for-the-badge)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/home-operations/containers/release.yaml?style=for-the-badge&label=Release)
 
 </div>
 
-Welcome to my container images, if looking for a container start by [browsing the GitHub Packages page for this repo's packages](https://github.com/onedr0p?tab=packages&repo_name=containers).
+Welcome to our container images, if looking for a container start by [browsing the GitHub Packages page for this repo's packages](https://github.com/orgs/home-operations/packages?repo_name=containers).
 
 ## Mission statement
 
@@ -33,16 +30,16 @@ We do take a similar approach but instead of appending a `-ls69` or `-r420` pref
 
 | Container                                          | Immutable |
 |----------------------------------------------------|-----------|
-| `ghcr.io/onedr0p/sonarr:rolling`                   | ❌         |
-| `ghcr.io/onedr0p/sonarr:4.0.13.2932`                | ❌         |
-| `ghcr.io/onedr0p/sonarr:rolling@sha256:8053...`    | ✅         |
-| `ghcr.io/onedr0p/sonarr:4.0.13.2932@sha256:8053...` | ✅         |
+| `ghcr.io/home-operations/sonarr:rolling`                   | ❌         |
+| `ghcr.io/home-operations/sonarr:4.0.13.2932`                | ❌         |
+| `ghcr.io/home-operations/sonarr:rolling@sha256:8053...`    | ✅         |
+| `ghcr.io/home-operations/sonarr:4.0.13.2932@sha256:8053...` | ✅         |
 
 _If pinning an image to the sha256 digest, tools like [Renovate](https://github.com/renovatebot/renovate) support updating the container on a digest or application version change._
 
 ## Eschewed features
 
-There is no multiple "channels" of the same application. For example Prowlarr, Radarr, and Sonarr will only have the develop branch published and not the master "stable" branch. Qbittorrent will only be published with LibTorrent 2.x.
+There is no multiple "channels" of the same application. For example Prowlarr, Radarr, Lidarr, and Sonarr will only have the develop branch published and not the master "stable" branch. Qbittorrent will only be published with LibTorrent 2.x.
 
 ## Rootless
 
@@ -57,7 +54,7 @@ networks:
     external: true
 services:
   sonarr:
-    image: ghcr.io/onedr0p/sonarr:4.0.13.2932
+    image: ghcr.io/home-operations/sonarr:4.0.13.2932
     container_name: sonarr
     user: 65534:65534
     # ...
