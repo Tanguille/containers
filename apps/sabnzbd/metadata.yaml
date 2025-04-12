@@ -1,4 +1,4 @@
 ---
 # renovate: datasource=github-releases depName=sabnzbd/sabnzbd
-version: 4.4.1
+version: 4.5.1
 name: sabnzbd
