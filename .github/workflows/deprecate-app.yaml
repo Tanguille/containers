@@ -52,8 +52,6 @@ jobs:
             **Reason**: ${{ inputs.reason }}
           branch: deprecate/${{ inputs.app }}
           commit-message: "release(${{ inputs.app }})!: deprecate container image"
-          sign-commits: true
-          signoff: true
           title: "release(${{ inputs.app }})!: deprecate container image"
           token: ${{ steps.app-token.outputs.token }}
 

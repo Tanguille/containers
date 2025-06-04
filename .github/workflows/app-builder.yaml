@@ -245,19 +245,6 @@ jobs:
           dependency-snapshot: true
           image: ghcr.io/${{ env.OWNER_LC }}/${{ inputs.app }}@${{ needs.release.outputs.digest }}
 
-      - name: Attestation
-        uses: actions/attest-build-provenance@db473fddc028af60658334401dc6fa3ffd8669fd # v2.3.0
-        with:
-          push-to-registry: true
-          subject-name: ghcr.io/${{ env.OWNER_LC }}/${{ inputs.app }}
-          subject-digest: ${{ needs.release.outputs.digest }}
-
-      - name: Verify Attestation
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: |
-          gh attestation verify --repo ${{ github.repository }} oci://ghcr.io/${{ env.OWNER_LC }}/${{ inputs.app }}@${{ needs.release.outputs.digest }}
-
   announce:
     if: ${{ inputs.release && needs.plan.outputs.app-exists != 'true' }}
     name: Announce
