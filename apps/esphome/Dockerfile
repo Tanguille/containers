@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM docker.io/library/python:3.13
+FROM docker.io/library/python:3.13-slim
 ARG VERSION
 
 ENV \
@@ -28,10 +28,15 @@ RUN \
     apt-get update \
     && \
     apt-get install -y --no-install-recommends --no-install-suggests \
-        build-essential \
         ca-certificates \
         catatonit \
+        curl \
         git \
+        iputils-ping \
+        libcairo2 \
+        libmagic1 \
+        openssh-client \
+        patch \
     && pip install uv \
     && uv pip install \
         setuptools \
@@ -39,7 +44,7 @@ RUN \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get autoremove -y \
     && apt-get clean \
-    && rm -rf /tmp/*
+    && rm -rf /tmp/* /var/{cache,log}/* /var/lib/apt/lists/* /usr/src/*
 
 COPY . /
 

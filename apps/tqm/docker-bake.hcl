@@ -1,16 +1,16 @@
 target "docker-metadata-action" {}
 
 variable "APP" {
-  default = "whisparr"
+  default = "tqm"
 }
 
 variable "VERSION" {
-  // renovate: datasource=custom.servarr-nightly depName=whisparr versioning=loose
-  default = "2.0.0.1171"
+  // renovate: datasource=github-releases depName=autobrr/tqm
+  default = "v1.15.0"
 }
 
 variable "SOURCE" {
-  default = "https://github.com/Whisparr/Whisparr"
+  default = "https://github.com/autobrr/tqm"
 }
 
 group "default" {

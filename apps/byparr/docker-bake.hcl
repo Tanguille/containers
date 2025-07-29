@@ -1,16 +1,16 @@
 target "docker-metadata-action" {}
 
 variable "APP" {
-  default = "whisparr"
+  default = "byparr"
 }
 
 variable "VERSION" {
-  // renovate: datasource=custom.servarr-nightly depName=whisparr versioning=loose
-  default = "2.0.0.1171"
+  // renovate: datasource=github-releases depName=ThePhaseless/Byparr
+  default = "v1.2.1"
 }
 
 variable "SOURCE" {
-  default = "https://github.com/Whisparr/Whisparr"
+  default = "https://github.com/ThePhaseless/Byparr"
 }
 
 group "default" {
